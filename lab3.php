@@ -62,7 +62,7 @@ echo $website_name;
 <?php
  if(isset($_REQUEST["name"]) or isset($_REQUEST["email"]) or isset($_REQUEST["group"])
  or isset($_REQUEST["class"]) or isset($_REQUEST["gender"]) or isset($_REQUEST["courses"])){
-    echo "<strong>Your given values are as:</strong><br/>";
+    echo "Your given values". "<br/>";
     echo "Name:". $_REQUEST['name']. "<br/>";
     echo "E_mail:". $_REQUEST['email']."<br/>";
     echo "Group:".$_REQUEST['group']. "<br/>";
