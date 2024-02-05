@@ -1,6 +1,6 @@
 <html>
     <body>
-        <form action="<?php $_PHP_SELF ?>" method="post">
+        <form action="<?php $_PHP_SELF ?>" method="POST">
             <h1>User Registration Form</h1>
             <p>Please fill out the form and submit to add user record to the database.</p>
             <table>
@@ -27,9 +27,8 @@
                     <td><input type="checkbox" name="mail_status" value="on" /></td>
                 </tr>
 
-
                 <tr>
-                    <td><input type="submit" value="Submit"></td>
+                    <td><input name="submit" type="submit" value="Submit"></td>
                     <td><input type="button" value="Cancel"></td>
                 </tr>
             </table>
@@ -59,14 +58,15 @@ if (!$retval) {
 mysqli_select_db($conn, $dbname);
 
 // Create the users table
-$sql = 'CREATE TABLE IF NOT EXISTS users(
-    user_id INT NOT NULL AUTO_INCREMENT,
-    user_Name VARCHAR(20) NOT NULL,
-    user_email VARCHAR(20) NOT NULL,
-    user_gender VARCHAR(20) NOT NULL,
-    mail_status VARCHAR(3) NOT NULL,
-    PRIMARY KEY (user_id)
+$sql = 'CREATE TABLE IF NOT EXISTS users (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_Name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    user_gender ENUM("Male", "Female", "Other") NOT NULL,
+    mail_status VARCHAR(3) NOT NULL CHECK (mail_status IN (1, 0)),
+    PRIMARY KEY (id)
 )';
+
 
 $retval = mysqli_query($conn, $sql);
 if (!$retval) {
@@ -75,7 +75,7 @@ if (!$retval) {
 
 echo 'Database and Table created successfully';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['submit'])) {
     $name = $_POST['user_Name'];
     $email = $_POST['user_email'];
     $gender = $_POST['user_gender'];
@@ -83,19 +83,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $isCheckedValue = $isChecked ? 'yes' : 'no';
 
     // Insert data into the database 
-    $stmt = mysqli_prepare($conn, "INSERT INTO users (user_Name, user_email, user_gender, mail_status)
-     VALUES (?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, 'ssss', $name, $email, $gender, $isCheckedValue);
-    
-    $retval = mysqli_stmt_execute($stmt);
-
-    if (!$retval) {
-        die('Could not insert into table: ' . mysqli_error($conn));
-    }
-
-    echo "<br>Data inserted into table successfully\n";
-
-    mysqli_stmt_close($stmt);
+    $sql = "INSERT INTO users (user_Name, user_email ,user_gender , mail_status)
+     VALUES ('$name', '$email' ,' $gender' , '$isCheckedValue')";
+        
+        if (mysqli_query($conn, $sql)) {
+            echo 'data inserted successfully';
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
 }
  
 

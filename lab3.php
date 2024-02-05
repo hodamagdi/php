@@ -6,7 +6,7 @@ echo $website_name;
 
 <html>
     <body>
-        <form action = "<?php $_PHP_SELF ?>" method = "GET">
+        <form action = "<?php $_PHP_SELF ?>" method = "POST">
             <table>
                 <tr>
                     <td>Name:</td>
@@ -52,7 +52,7 @@ echo $website_name;
                 </tr>
 
                 <tr>
-                    <td><input type="submit" value="Submit"></td>
+                    <td><input type="submit" value="Submit" name="submit"></td>
                 </tr>
             </table>
         </form>
@@ -60,15 +60,23 @@ echo $website_name;
 </html>
 
 <?php
- if(isset($_REQUEST["name"]) or isset($_REQUEST["email"]) or isset($_REQUEST["group"])
- or isset($_REQUEST["class"]) or isset($_REQUEST["gender"]) or isset($_REQUEST["courses"])){
+
+ if(isset($_POST["submit"])){
+    $Name = $_POST['name'];
+    $email = $_POST['email'];
+    $Group = $_POST['group'];
+    $class = $_POST['class']; 
+    $Gender = isset($_POST['gender']) ? $_POST['gender'] : '';
+    $courses = isset($_POST['courses']) ? $_POST['courses'] : [];
+
+
     echo "Your given values". "<br/>";
-    echo "Name:". $_REQUEST['name']. "<br/>";
-    echo "E_mail:". $_REQUEST['email']."<br/>";
-    echo "Group:".$_REQUEST['group']. "<br/>";
-    echo "class details:".$_REQUEST['class']."<br/>";
-    echo "Gender:".$_REQUEST['gender']."<br/>";
-    echo "Selected Courses are:".implode(', ', $_REQUEST['courses'])."<br/>";
+    echo "Name:". $Name . "<br/>";
+    echo "E_mail:". $email."<br/>";
+    echo "Group:".$Group. "<br/>";
+    echo "class details:".$class."<br/>";
+    echo "Gender:".$Gender."<br/>";
+    echo "Selected Courses are:".implode(', ', $courses)."<br/>";
     exit();
  }
 ?>
